@@ -1,0 +1,175 @@
+/* ================= General Reset ================= */
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --item-height: 100px;
+    --primary-color: #ff7a59;
+    --background-color: #f5f5f7;
+    --container-color: #fff0cb;
+    --reel-bg: #e0e0e0;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    overflow: hidden;
+}
+
+/* ================= Title ================= */
+.title {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    text-align: center;
+    font-size: 70px;
+    font-weight: 700;
+    color: #ff5919;
+    letter-spacing: 1px;
+    z-index: 10;
+    animation: titlePulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes titlePulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* ================= Fullscreen Container ================= */
+#container {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--container-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
+
+/* ================= Slot Machine Window ================= */
+.window-border {
+    padding: 10px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #f9f9f9, #e6e6e6);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) inset;
+}
+
+.window {
+    position: relative;
+    overflow: hidden;
+    height: calc(3 * var(--item-height));
+    border-radius: 15px;
+    background-color: var(--reel-bg);
+}
+
+/* top/bottom fade */
+.window::before, .window::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 8px;
+}
+.window::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.08), transparent);
+}
+.window::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.08), transparent);
+}
+
+/* ================= Reels ================= */
+.outer-col {
+    overflow-y: hidden;
+    width: 100px;
+    float: left;
+    margin: 0 5px;
+    border-radius: 15px;
+    background-color: var(--reel-bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) inset;
+    height: calc(var(--item-height) * 3);
+}
+
+.outer-spacer {
+    width: 5px;
+    float: left;
+}
+
+/* ================= Icons ================= */
+.icon {
+    width: 100%;
+    height: var(--item-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.col {
+    padding: 0 10px;
+    will-change: transform;
+    transform: translateY(calc(-100% + var(--item-height) * 3)); /* critical for JS spin */
+}
+
+.col img {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* ================= Shadow effect ================= */
+.col .icon::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 1px;
+    background-color: white;
+    box-shadow: 0 0 35px 30px rgba(12, 0, 14, 0.15);
+    z-index: 2;
+    border-radius: 100%;
+}
+
+/* ================= Spinning animation ================= */
+#container.spinning .outer-col:nth-of-type(2) .col { animation-delay: 0.01s; }
+#container.spinning .outer-col:nth-of-type(3) .col { animation-delay: 0.02s; }
+#container.spinning .outer-col:nth-of-type(4) .col { animation-delay: 0.03s; }
+
+#container.spinning .col {
+    animation-name: scroll;
+    animation-iteration-count: 1;
+    animation-timing-function: cubic-bezier(.65, .97, .72, 1);
+}
+
+@keyframes scroll {
+    to { transform: translateY(0); }
+}
+
+/* ================= Spin Button ================= */
+.start-button {
+    margin-top: 30px;
+    padding: 18px 50px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.start-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
