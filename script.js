@@ -1,107 +1,144 @@
+// ===================== Configuration =====================
 const ICONS = [
-    'apple', 'apricot', 'banana', 'big_win', 'cherry', 'grapes', 'lemon', 'lucky_seven', 'orange', 'pear', 'strawberry', 'watermelon',
+    'apple', 'apricot', 'banana', 'big_win', 'cherry', 'grapes',
+    'lemon', 'lucky_seven', 'orange', 'pear', 'strawberry', 'watermelon'
 ];
 
-/**
- * @type {number} The minimum spin time in seconds
- */
-const BASE_SPINNING_DURATION = 2.7;
+// Probability of a forced winning spin (0.0 = 0%, 1.0 = 100%)
+const WIN_CHANCE = 0.99; // 20% chance to win
 
-/**
- * @type {number} The additional duration to the base duration for each row (in seconds).
- * It makes the typical effect that the first reel ends, then the second, and so on...
- */
-const COLUMN_SPINNING_DURATION = 0.3;
+const BASE_SPINNING_DURATION = 2.7; // seconds
+const COLUMN_SPINNING_DURATION = 0.3; // additional per column
 
+let cols;
 
-var cols;
-
-
-window.addEventListener('DOMContentLoaded', function(event) {
+// ===================== Initialize =====================
+window.addEventListener('DOMContentLoaded', () => {
     cols = document.querySelectorAll('.col');
-
     setInitialItems();
 });
 
+// ===================== Set Initial Items =====================
 function setInitialItems() {
-    let baseItemAmount = 40;
+    const baseItemAmount = 40;
 
-    for (let i = 0; i < cols.length; ++i) {
-        let col = cols[i];
-        let amountOfItems = baseItemAmount + (i * 3); // Increment the amount for each column
+    for (let i = 0; i < cols.length; i++) {
+        const col = cols[i];
+        const amountOfItems = baseItemAmount + i * 3;
         let elms = '';
         let firstThreeElms = '';
 
         for (let x = 0; x < amountOfItems; x++) {
-            let icon = getRandomIcon();
-            let item = '<div class="icon" data-item="' + icon + '"><img src="items/' + icon + '.png"></div>';
+            const icon = getRandomIcon();
+            const item = `<div class="icon" data-item="${icon}"><img src="items/${icon}.png"></div>`;
             elms += item;
-
-            if (x < 3) firstThreeElms += item; // Backup the first three items because the last three must be the same
+            if (x < 3) firstThreeElms += item;
         }
+
         col.innerHTML = elms + firstThreeElms;
     }
 }
 
-/**
- * Called when the start-button is pressed.
- *
- * @param elem The button itself
- */
-function spin(elem) {
+// ===================== Spin Function =====================
+function spin(button) {
     let duration = BASE_SPINNING_DURATION + randomDuration();
 
-    for (let col of cols) { // set the animation duration for each column
+    for (let col of cols) {
         duration += COLUMN_SPINNING_DURATION + randomDuration();
         col.style.animationDuration = duration + "s";
     }
 
-    // disable the start-button
-    elem.setAttribute('disabled', true);
-
-    // set the spinning class so the css animation starts to play
+    button.setAttribute('disabled', true);
     document.getElementById('container').classList.add('spinning');
 
-    // set the result delayed
-    // this would be the right place to request the combination from the server
-    window.setTimeout(setResult, BASE_SPINNING_DURATION * 1000 / 2);
+    // Set result halfway through the spin
+    setTimeout(setResult, BASE_SPINNING_DURATION * 1000 / 2);
 
-    window.setTimeout(function () {
-        // after the spinning is done, remove the class and enable the button again
+    // Re-enable button after spin ends
+    setTimeout(() => {
         document.getElementById('container').classList.remove('spinning');
-        elem.removeAttribute('disabled');
-    }.bind(elem), duration * 1000);
+        button.removeAttribute('disabled');
+    }, duration * 1000);
 }
 
-/**
- * Sets the result items at the beginning and the end of the columns
- */
+// ===================== Set Result & Win Detection =====================
 function setResult() {
-    for (let col of cols) {
+    const firstRowIcons = [];
+    let isWin = false;
 
-        // generate 3 random items
-        let results = [
-            getRandomIcon(),
-            getRandomIcon(),
-            getRandomIcon()
-        ];
+    // Determine if this spin should be a win
+    const forceWin = Math.random() < WIN_CHANCE;
+    const winningIcon = forceWin ? getRandomIcon() : null;
 
-        let icons = col.querySelectorAll('.icon img');
-        // replace the first and last three items of each column with the generated items
+    for (let colIndex = 0; colIndex < cols.length; colIndex++) {
+        const col = cols[colIndex];
+        const results = [];
+
+        for (let i = 0; i < 3; i++) {
+            // If it's a forced win, all top-row icons are the winning icon
+            if (i === 0 && forceWin) {
+                results.push(winningIcon);
+            } else {
+                results.push(getRandomIcon());
+            }
+        }
+
+        const icons = col.querySelectorAll('.icon img');
         for (let x = 0; x < 3; x++) {
             icons[x].setAttribute('src', 'items/' + results[x] + '.png');
-            icons[(icons.length - 3) + x].setAttribute('src', 'items/' + results[x] + '.png');
+            icons[icons.length - 3 + x].setAttribute('src', 'items/' + results[x] + '.png');
         }
+
+        firstRowIcons.push(results[0]);
+    }
+
+    // Check if all first-row icons match
+    if (firstRowIcons.every(icon => icon === firstRowIcons[0])) {
+        isWin = true;
+    }
+
+    if (isWin) {
+        showWinAnimation();
+        highlightWinningIcons();
+        console.log("🎉 Winning spin! Icon: " + firstRowIcons[0]);
     }
 }
 
+// ===================== Utility Functions =====================
 function getRandomIcon() {
     return ICONS[Math.floor(Math.random() * ICONS.length)];
 }
 
-/**
- * @returns {number} 0.00 to 0.09 inclusive
- */
 function randomDuration() {
-    return Math.floor(Math.random() * 10) / 100;
+    return Math.floor(Math.random() * 10) / 100; // 0.00 - 0.09s
+}
+
+// ===================== Win Overlay Animation =====================
+function showWinAnimation() {
+    const overlay = document.getElementById('win-overlay');
+    overlay.style.display = 'block';
+    overlay.style.animation = 'none'; // reset
+    void overlay.offsetWidth; // force reflow
+    overlay.style.animation = 'confetti 1s ease-out forwards';
+
+    setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.style.animation = '';
+    }, 1000);
+}
+
+// ===================== Highlight Winning Icons =====================
+function highlightWinningIcons() {
+    for (let col of cols) {
+        const topIcon = col.querySelectorAll('.icon img')[0];
+        topIcon.parentElement.classList.add('win');
+    }
+
+    // Remove glow after 1s
+    setTimeout(() => {
+        for (let col of cols) {
+            const topIcon = col.querySelectorAll('.icon img')[0];
+            topIcon.parentElement.classList.remove('win');
+        }
+    }, 1000);
 }

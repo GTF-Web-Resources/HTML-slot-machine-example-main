@@ -5,58 +5,64 @@
 
 :root {
     --item-height: 100px;
-    --primary-color: #ff7a59;
-    --background-color: #f5f5f7;
-    --container-color: #fff0cb;
-    --reel-bg: #e0e0e0;
+    --primary-color: #ff5919;    /* bright orange accent */
+    --secondary-color: #ffcc03;  /* bright yellow highlight */
+    --background-color: #fff0cb; /* cream background */
+    --reel-bg: #fff0cb;          /* cream reels */
+    --dark-accent: #4f1b00;      /* dark brown shadows */
+    --green-accent: #7a9800;     /* green glow / highlights */
 }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--background-color);
     overflow: hidden;
 }
 
-/* ================= Title ================= */
+/* ================= Animated Title ================= */
 .title {
     position: absolute;
     top: 40px;
     width: 100%;
     text-align: center;
-    font-size: 70px;
-    font-weight: 700;
-    color: #ff5919;
-    letter-spacing: 1px;
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--primary-color);
+    text-shadow: 2px 2px var(--secondary-color), 4px 4px var(--green-accent);
+    letter-spacing: 2px;
     z-index: 10;
-    animation: titlePulse 1.5s infinite alternate ease-in-out;
+    animation: titleBounce 1.2s infinite alternate ease-in-out;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Clean sans-serif */
 }
 
-@keyframes titlePulse {
+@keyframes titleBounce {
     from { transform: scale(1); }
-    to { transform: scale(1.05); }
+    to { transform: scale(1.15) rotate(-2deg); }
 }
 
 /* ================= Fullscreen Container ================= */
 #container {
     width: 100vw;
     height: 100vh;
-    background-color: var(--container-color);
+    background-color: var(--background-color);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 60px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-    border-radius: 20px;
+    padding: 40px;
+    /* removed border around container */
+    border-radius: 30px;
+    box-shadow: 0 0 40px 8px var(--secondary-color) inset;
+    position: relative;
 }
 
 /* ================= Slot Machine Window ================= */
 .window-border {
-    padding: 10px;
+    padding: 8px;
     border-radius: 20px;
-    background: linear-gradient(180deg, #f9f9f9, #e6e6e6);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1) inset;
+    background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3) inset;
 }
 
 .window {
@@ -65,10 +71,12 @@ body {
     height: calc(3 * var(--item-height));
     border-radius: 15px;
     background-color: var(--reel-bg);
+    border: 3px solid var(--primary-color);
 }
 
-/* top/bottom fade */
-.window::before, .window::after {
+/* Soft top/bottom overlay */
+.window::before,
+.window::after {
     content: "";
     position: absolute;
     left: 0;
@@ -77,11 +85,11 @@ body {
 }
 .window::before {
     top: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.08), transparent);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.7), transparent);
 }
 .window::after {
     bottom: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.08), transparent);
+    background: linear-gradient(to top, rgba(255,255,255,0.7), transparent);
 }
 
 /* ================= Reels ================= */
@@ -90,9 +98,9 @@ body {
     width: 100px;
     float: left;
     margin: 0 5px;
-    border-radius: 15px;
+    border-radius: 20px;
     background-color: var(--reel-bg);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05) inset;
+    box-shadow: 0 0 15px var(--secondary-color) inset;
     height: calc(var(--item-height) * 3);
 }
 
@@ -113,33 +121,31 @@ body {
 .col {
     padding: 0 10px;
     will-change: transform;
-    transform: translateY(calc(-100% + var(--item-height) * 3)); /* critical for JS spin */
+    transform: translateY(calc(-100% + var(--item-height) * 3));
 }
 
 .col img {
     width: 80%;
     height: auto;
     margin: 0 auto;
-    border-radius: 10px;
+    border-radius: 15px;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--green-accent);
     transition: transform 0.2s ease-in-out;
 }
 
-/* ================= Shadow effect ================= */
-.col .icon::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1px;
-    height: 1px;
-    background-color: white;
-    box-shadow: 0 0 35px 30px rgba(12, 0, 14, 0.15);
-    z-index: 2;
-    border-radius: 100%;
+/* Glow for Winning Icons */
+.icon.win img {
+    animation: glowArcade 1s ease-in-out forwards;
 }
 
-/* ================= Spinning animation ================= */
+@keyframes glowArcade {
+    0% { transform: scale(1); box-shadow: 0 0 0px var(--secondary-color); }
+    50% { transform: scale(1.2); box-shadow: 0 0 25px 15px var(--secondary-color); }
+    100% { transform: scale(1); box-shadow: 0 0 0px var(--secondary-color); }
+}
+
+/* ================= Spinning Animation ================= */
 #container.spinning .outer-col:nth-of-type(2) .col { animation-delay: 0.01s; }
 #container.spinning .outer-col:nth-of-type(3) .col { animation-delay: 0.02s; }
 #container.spinning .outer-col:nth-of-type(4) .col { animation-delay: 0.03s; }
@@ -157,19 +163,39 @@ body {
 /* ================= Spin Button ================= */
 .start-button {
     margin-top: 30px;
-    padding: 18px 50px;
-    font-size: 22px;
-    font-weight: 600;
-    color: #fff;
+    padding: 20px 60px;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--background-color);
     background: var(--primary-color);
-    border: none;
-    border-radius: 15px;
+    border: 4px solid var(--secondary-color);
+    border-radius: 25px;
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px var(--secondary-color);
+    text-shadow: 1px 1px var(--dark-accent);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .start-button:active {
     transform: translateY(2px);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 10px var(--secondary-color);
+}
+
+/* ================= Winning Spin Overlay ================= */
+#win-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+    z-index: 999;
+}
+
+@keyframes confetti {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1); }
 }
