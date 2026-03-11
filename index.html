@@ -2,45 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sloty</title>
-    
-    <!-- Import Pixel Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    
-    <!-- Your CSS -->
+    <title>Sloty Retro Cornfield</title>
     <link rel="stylesheet" href="./style.css">
-    
-    <!-- JS -->
     <script src="./script.js" defer></script>
 </head>
 <body>
 
-    <!-- Animated Title -->
+    <!-- Pixel-arcade title -->
     <div class="title">SPIN TO WIN!</div>
 
-    <!-- Slot Machine Container -->
-    <div id="container">
-        <div class="window-border">
-            <div class="window">
-                <div class="outer-spacer"></div>
-                <div class="outer-col"><div class="col"></div></div>
-                <div class="outer-spacer"></div>
-                <div class="outer-col"><div class="col"></div></div>
-                <div class="outer-spacer"></div>
-                <div class="outer-col"><div class="col"></div></div>
-                <div class="outer-spacer"></div>
-                <div class="outer-col"><div class="col"></div></div>
-                <div class="outer-spacer"></div>
-                <div class="outer-col"><div class="col"></div></div>
-                <div class="outer-spacer"></div>
+    <!-- Main wrapper -->
+    <div id="main-wrapper">
+
+        <!-- Background layer -->
+        <div class="background"></div>
+
+        <!-- Optional corn stalks in foreground -->
+        <div class="corn-left"></div>
+        <div class="corn-right"></div>
+
+        <!-- Slot machine wrapper -->
+        <div class="slot-machine-wrapper">
+
+            <!-- Slot machine sprite -->
+            <img src="images/slot_machine_sprite.png" class="slot-machine-sprite">
+
+            <!-- Functional slot machine overlay -->
+            <div class="slot-screen-container">
+                <div class="window-border">
+                    <div class="window">
+                        <div class="outer-spacer"></div>
+                        <div class="outer-col"><div class="col"></div></div>
+                        <div class="outer-spacer"></div>
+                        <div class="outer-col"><div class="col"></div></div>
+                        <div class="outer-spacer"></div>
+                        <div class="outer-col"><div class="col"></div></div>
+                        <div class="outer-spacer"></div>
+                        <div class="outer-col"><div class="col"></div></div>
+                        <div class="outer-spacer"></div>
+                        <div class="outer-col"><div class="col"></div></div>
+                        <div class="outer-spacer"></div>
+                    </div>
+                </div>
+
+                <!-- Spin button -->
+                <input type="button" onclick="spin(this)" class="start-button" value="Spin"/>
             </div>
+
         </div>
 
-        <!-- Spin Button -->
-        <input type="button" onclick="spin(this)" class="start-button" value="Spin"/>
     </div>
 
-    <!-- Win Overlay (outside container for proper display) -->
+    <!-- Win overlay -->
     <div id="win-overlay"></div>
 
 </body>

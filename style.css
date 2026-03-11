@@ -13,27 +13,35 @@
     --green-accent: #7a9800;     /* green accent */
 }
 
-/* ================= Body & Background ================= */
+/* ================= Body ================= */
 body {
     margin: 0;
     font-family: 'Press Start 2P', monospace;
     overflow: hidden;
-    background-color: #87ceeb; /* sky-blue fallback */
+    background-color: #87ceeb; /* sky fallback */
     position: relative;
 }
 
-/* Cornfield background */
-body::before {
-    content: '';
-    position: fixed;
+/* ================= Main Wrapper ================= */
+#main-wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ================= Background ================= */
+.background {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('images/cornfield_tile.png'); /* tileable cornfield */
-    background-repeat: repeat-x;
-    background-size: auto 100%; /* stretch vertically to full height */
-    z-index: 0; /* behind everything */
+    background-image: url('images/cornfield.png');
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    z-index: 0;
 }
 
 /* ================= Pixel Title ================= */
@@ -48,18 +56,12 @@ body::before {
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: geometricPrecision;
-
-    /* Arcade colors & glow */
     color: var(--primary-color);
     text-shadow: 2px 2px var(--dark-accent), 4px 4px var(--secondary-color);
-
-    /* Flashing animation */
     animation: arcadeFlash 0.8s infinite;
-
-    z-index: 9999; /* above container */
+    z-index: 9999;
 }
 
-/* Flashing arcade keyframes */
 @keyframes arcadeFlash {
     0%, 100% { color: var(--primary-color); text-shadow: 2px 2px var(--dark-accent), 4px 4px var(--secondary-color); }
     25% { color: var(--secondary-color); text-shadow: 2px 2px var(--primary-color), 4px 4px var(--dark-accent); }
@@ -67,23 +69,38 @@ body::before {
     75% { color: var(--primary-color); text-shadow: 2px 2px var(--green-accent), 4px 4px var(--secondary-color); }
 }
 
-/* ================= Container ================= */
-#container {
-    width: 100vw;
-    height: 100vh;
+/* ================= Slot Machine Wrapper ================= */
+.slot-machine-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Slot machine sprite image */
+.slot-machine-sprite {
+    width: 600px;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Functional slot screen container */
+.slot-screen-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-    z-index: 10; /* above cornfield */
-
-    /* Dirt patch under the slot machine */
-    background-color: #8b5a2b; /* dirt brown */
-    background-image: url('images/dirt_patch.png'); /* optional texture */
-    background-repeat: no-repeat;
-    background-size: 400px 200px; /* adjust size to slot machine width */
-    background-position: center bottom;
+    z-index: 10;
 }
 
 /* ================= Slot Machine Window ================= */
@@ -118,7 +135,6 @@ body::before {
 
 .outer-spacer { width: 3px; float: left; }
 
-/* ================= Icons ================= */
 .icon {
     width: 100%;
     height: var(--item-height);
@@ -151,15 +167,15 @@ body::before {
 }
 
 /* ================= Spinning Animation ================= */
-#container.spinning .outer-col:nth-of-type(2) .col { animation-delay: 0.01s; }
-#container.spinning .outer-col:nth-of-type(3) .col { animation-delay: 0.02s; }
-#container.spinning .outer-col:nth-of-type(4) .col { animation-delay: 0.03s; }
-
-#container.spinning .col {
+.slot-screen-container.spinning .col {
     animation-name: scroll;
     animation-iteration-count: 1;
     animation-timing-function: cubic-bezier(.65, .97, .72, 1);
 }
+
+.slot-screen-container.spinning .outer-col:nth-of-type(2) .col { animation-delay: 0.01s; }
+.slot-screen-container.spinning .outer-col:nth-of-type(3) .col { animation-delay: 0.02s; }
+.slot-screen-container.spinning .outer-col:nth-of-type(4) .col { animation-delay: 0.03s; }
 
 @keyframes scroll { to { transform: translateY(0); } }
 
@@ -177,7 +193,7 @@ body::before {
     text-shadow: 2px 2px var(--dark-accent);
     image-rendering: pixelated;
     box-shadow: 2px 2px var(--dark-accent);
-    z-index: 12; /* above corn foreground if needed */
+    z-index: 12;
 }
 
 .start-button:active {
@@ -197,16 +213,16 @@ body::before {
     z-index: 999;
 }
 
-/* ================= Corn Stalks in Foreground ================= */
+/* ================= Optional Corn Stalks ================= */
 .corn-left, .corn-right {
     position: absolute;
     bottom: 0;
     width: 120px;
     height: 300px;
-    background-image: url('images/corn_stalk.png'); /* single stalk sprite */
+    background-image: url('images/corn_stalk.png');
     background-size: contain;
     background-repeat: no-repeat;
-    z-index: 11; /* above slot machine container */
+    z-index: 11;
 }
 
 .corn-left { left: 0; }

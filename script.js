@@ -11,17 +11,14 @@ const BASE_SPINNING_DURATION = 2.7; // seconds
 const COLUMN_SPINNING_DURATION = 0.3; // additional per column
 
 let cols;
+let wrapper;
 
 // ===================== Initialize =====================
 window.addEventListener('DOMContentLoaded', () => {
-    cols = document.querySelectorAll('.col');
+    // Select columns inside the new slot-screen-container
+    cols = document.querySelectorAll('.slot-screen-container .col');
+    wrapper = document.querySelector('.slot-screen-container');
     setInitialItems();
-
-    // Ensure Press Start 2P font is loaded before starting arcade animation
-    document.fonts.load('16px "Press Start 2P"').then(() => {
-        const title = document.querySelector('.title');
-        title.style.animation = 'arcadeFlash 0.8s infinite';
-    });
 });
 
 // ===================== Set Initial Items =====================
@@ -55,14 +52,14 @@ function spin(button) {
     }
 
     button.setAttribute('disabled', true);
-    document.getElementById('container').classList.add('spinning');
+    wrapper.classList.add('spinning');
 
     // Set result halfway through the spin
     setTimeout(setResult, BASE_SPINNING_DURATION * 1000 / 2);
 
     // Re-enable button after spin ends
     setTimeout(() => {
-        document.getElementById('container').classList.remove('spinning');
+        wrapper.classList.remove('spinning');
         button.removeAttribute('disabled');
     }, duration * 1000);
 }
