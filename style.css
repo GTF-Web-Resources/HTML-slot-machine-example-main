@@ -183,7 +183,7 @@ body {
     z-index: 20;
     transform: translateX(-15px); /* move button left */
 }
-.start-button:active { transform: translateY(2px); }
+.start-button:active { transform: translateY(2px); transform: translateX(-15px);}
 
 /* Win Overlay */
 #win-overlay {
