@@ -1,4 +1,4 @@
-/* ================= General Reset ================= */
+/* General Reset */
 * { box-sizing: border-box; }
 
 :root {
@@ -11,7 +11,7 @@
     --green-accent: #7a9800;
 }
 
-/* ================= Body ================= */
+/* Body */
 body {
     margin: 0;
     font-family: 'Press Start 2P', monospace;
@@ -19,7 +19,7 @@ body {
     background-color: #87ceeb;
 }
 
-/* ================= Main Wrapper ================= */
+/* Main Wrapper */
 #main-wrapper {
     width: 100vw;
     height: 100vh;
@@ -27,21 +27,18 @@ body {
     overflow: hidden;
 }
 
-/* ================= Background ================= */
+/* Background */
 .background {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background-image: url('images/cornfield.png');
     background-size: cover;
     background-position: center bottom;
-    background-repeat: no-repeat;
     z-index: 0;
 }
 
-/* ================= Corn Stalks ================= */
+/* Corn Stalks */
 .corn-left, .corn-right {
     position: absolute;
     bottom: 0;
@@ -55,7 +52,7 @@ body {
 .corn-left { left: 0; }
 .corn-right { right: 0; }
 
-/* ================= Pixel Title ================= */
+/* Pixel Title */
 .title {
     position: absolute;
     top: 30px;
@@ -64,15 +61,11 @@ body {
     font-size: 64px;
     font-weight: bold;
     font-family: 'Press Start 2P', monospace;
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: geometricPrecision;
     color: var(--primary-color);
     text-shadow: 2px 2px var(--dark-accent), 4px 4px var(--secondary-color);
     animation: arcadeFlash 0.8s infinite;
-    z-index: 9999;
+    z-index: 999;
 }
-
 @keyframes arcadeFlash {
     0%,100% { color: var(--primary-color); text-shadow: 2px 2px var(--dark-accent), 4px 4px var(--secondary-color); }
     25% { color: var(--secondary-color); text-shadow: 2px 2px var(--primary-color), 4px 4px var(--dark-accent); }
@@ -80,18 +73,19 @@ body {
     75% { color: var(--primary-color); text-shadow: 2px 2px var(--green-accent), 4px 4px var(--secondary-color); }
 }
 
-/* ================= Slot Machine Wrapper ================= */
+/* Slot Machine Wrapper */
 .slot-machine-wrapper {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;  /* scale as needed for tall screen */
-    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 600px; /* adjust to fit tall screen */
     z-index: 10;
 }
 
-/* Slot machine sprite */
+/* Slot Sprite */
 .slot-machine-sprite {
     width: 100%;
     height: auto;
@@ -99,21 +93,20 @@ body {
     display: block;
 }
 
-/* ================= Functional Slot Screen ================= */
+/* Slot Screen Container (relative to wrapper) */
 .slot-screen-container {
     position: absolute;
-    top: 20%;   /* adjust to align with slot screen on sprite */
-    left: 11%;  /* adjust horizontally */
-    width: 72%; /* match slot machine screen width */
-    height: 60%; /* match slot machine screen height */
-    z-index: 15;
-    overflow: hidden; /* keep reels inside */
+    top: 22%;   /* adjust to match sprite screen */
+    left: 12.8%;
+    width: 69%;
+    height: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    overflow: hidden;
+    z-index: 15;
 }
 
-/* ================= Window & Reels ================= */
+/* Window & Reels */
 .window {
     display: flex;
     justify-content: space-between;
@@ -129,10 +122,7 @@ body {
     flex: 1;
     margin-right: 6px;
 }
-
-.outer-col:last-child {
-    margin-right: 0;
-}
+.outer-col:last-child { margin-right: 0; }
 
 .icon {
     width: 100%;
@@ -155,32 +145,31 @@ body {
     border: 2px solid var(--dark-accent);
 }
 
-/* Winning pixel glow */
+/* Winning glow */
 .icon.win img {
     animation: glow8bit 0.8s ease-in-out forwards;
 }
-
 @keyframes glow8bit {
     0%,100% { transform: scale(1); border-color: var(--dark-accent); }
     50% { transform: scale(1.2); border-color: var(--secondary-color); }
 }
 
-/* ================= Spinning Animation ================= */
+/* Spin animation */
 .slot-screen-container.spinning .col {
     animation-name: scroll;
     animation-iteration-count: 1;
     animation-timing-function: cubic-bezier(.65, .97, .72, 1);
 }
-
 .slot-screen-container.spinning .outer-col:nth-of-type(2) .col { animation-delay: 0.01s; }
 .slot-screen-container.spinning .outer-col:nth-of-type(3) .col { animation-delay: 0.02s; }
 .slot-screen-container.spinning .outer-col:nth-of-type(4) .col { animation-delay: 0.03s; }
-
 @keyframes scroll { to { transform: translateY(0); } }
 
-/* ================= Spin Button ================= */
+/* Spin Button */
 .start-button {
-    padding: 25px 42px;  /* original 60px reduced by ~30% */
+    padding: 18px 82px;
+    left: 6.8%;
+    margin-top: -150px; /* spacing below sprite */
     font-size: 18px;
     font-family: 'Press Start 2P', monospace;
     color: var(--background-color);
@@ -192,26 +181,14 @@ body {
     image-rendering: pixelated;
     box-shadow: 2px 2px var(--dark-accent);
     z-index: 20;
-    margin-top: 30px; /* further down from the reels */
 }
-
-/* Keep centered under reels */
-.slot-screen-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;  /* reels at top */
-    align-items: center;          /* centers button horizontally */
-}
-
 .start-button:active { transform: translateY(2px); }
 
-/* ================= Winning Spin Overlay ================= */
+/* Win Overlay */
 #win-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     pointer-events: none;
     display: none;
     background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
