@@ -168,7 +168,6 @@ body {
 /* Spin Button */
 .start-button {
     padding: 18px 82px;
-    left: 6.8%;
     margin-top: -150px; /* spacing below sprite */
     font-size: 18px;
     font-family: 'Press Start 2P', monospace;
@@ -181,6 +180,7 @@ body {
     image-rendering: pixelated;
     box-shadow: 2px 2px var(--dark-accent);
     z-index: 20;
+    transform: translateX(-15px); /* move button left */
 }
 .start-button:active { transform: translateY(2px); }
 
