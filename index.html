@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Sloty</title>
-
-    <!-- Local CSS -->
+    
+    <!-- Import Pixel Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <!-- Your CSS -->
     <link rel="stylesheet" href="./style.css">
-
-    <!-- Slot Machine Script -->
+    
+    <!-- JS -->
     <script src="./script.js" defer></script>
 </head>
 <body>
 
     <!-- Animated Title -->
     <div class="title">SPIN TO WIN!</div>
-
-    <!-- Corn stalks in foreground -->
-    <div class="corn-left"></div>
-    <div class="corn-right"></div>
 
     <!-- Slot Machine Container -->
     <div id="container">
@@ -41,7 +40,7 @@
         <input type="button" onclick="spin(this)" class="start-button" value="Spin"/>
     </div>
 
-    <!-- Win Overlay (above all for proper display) -->
+    <!-- Win Overlay (outside container for proper display) -->
     <div id="win-overlay"></div>
 
 </body>
