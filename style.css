@@ -91,6 +91,7 @@ body {
     height: auto;
     image-rendering: pixelated;
     display: block;
+    filter: drop-shadow(10px 50px 30px rgba(0,0,0,0.75));
 }
 
 /* Slot Screen Container (relative to wrapper) */
