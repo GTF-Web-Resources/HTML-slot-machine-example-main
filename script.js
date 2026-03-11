@@ -5,7 +5,7 @@ const ICONS = [
 ];
 
 // Probability of a forced winning spin (0.0 = 0%, 1.0 = 100%)
-const WIN_CHANCE = 0.99; // 20% chance to win
+const WIN_CHANCE = 0.99; // 99% chance to win
 
 const BASE_SPINNING_DURATION = 2.7; // seconds
 const COLUMN_SPINNING_DURATION = 0.3; // additional per column
@@ -16,6 +16,13 @@ let cols;
 window.addEventListener('DOMContentLoaded', () => {
     cols = document.querySelectorAll('.col');
     setInitialItems();
+
+    // ===================== Font Load & Title Animation =====================
+    // Ensure Press Start 2P is fully loaded before animating the title
+    document.fonts.load('16px "Press Start 2P"').then(() => {
+        const title = document.querySelector('.title');
+        title.style.animation = 'arcadeFlash 0.8s infinite';
+    });
 });
 
 // ===================== Set Initial Items =====================
