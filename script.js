@@ -15,7 +15,7 @@ let wrapper;
 
 // ===================== Initialize =====================
 window.addEventListener('DOMContentLoaded', () => {
-    // Select columns inside the new slot-screen-container
+    // Select columns inside the slot screen overlay
     cols = document.querySelectorAll('.slot-screen-container .col');
     wrapper = document.querySelector('.slot-screen-container');
     setInitialItems();
