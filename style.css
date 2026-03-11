@@ -13,25 +13,40 @@
     --green-accent: #7a9800;     /* green accent */
 }
 
+/* ================= Body & Background ================= */
 body {
     margin: 0;
     font-family: 'Press Start 2P', monospace;
-    background-color: var(--background-color);
     overflow: hidden;
+    background-color: #87ceeb; /* sky-blue fallback */
+    position: relative;
+}
+
+/* Cornfield background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/cornfield_tile.png'); /* tileable cornfield */
+    background-repeat: repeat-x;
+    background-size: auto 100%; /* stretch vertically to full height */
+    z-index: 0; /* behind everything */
 }
 
 /* ================= Pixel Title ================= */
 .title {
-    z-index: 9999;
     position: absolute;
     top: 30px;
     width: 100%;
     text-align: center;
-    font-size: 64px; /* multiples of 8 for sharp pixels */
+    font-size: 64px;
     font-weight: bold;
     font-family: 'Press Start 2P', monospace;
-    -webkit-font-smoothing: none;      /* Chrome/Safari */
-    -moz-osx-font-smoothing: grayscale; /* Firefox */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: geometricPrecision;
 
     /* Arcade colors & glow */
@@ -40,6 +55,8 @@ body {
 
     /* Flashing animation */
     animation: arcadeFlash 0.8s infinite;
+
+    z-index: 9999; /* above container */
 }
 
 /* Flashing arcade keyframes */
@@ -54,21 +71,27 @@ body {
 #container {
     width: 100vw;
     height: 100vh;
-    background-color: var(--background-color);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
     position: relative;
+    z-index: 10; /* above cornfield */
+
+    /* Dirt patch under the slot machine */
+    background-color: #8b5a2b; /* dirt brown */
+    background-image: url('images/dirt_patch.png'); /* optional texture */
+    background-repeat: no-repeat;
+    background-size: 400px 200px; /* adjust size to slot machine width */
+    background-position: center bottom;
 }
 
 /* ================= Slot Machine Window ================= */
 .window-border {
     padding: 0;
-    border-radius: 12px; /* slightly rounded pixel look */
+    border-radius: 12px;
     background-color: var(--primary-color);
-    border: 8px solid var(--dark-accent); /* thicker border */
+    border: 8px solid var(--dark-accent);
 }
 
 .window {
@@ -76,7 +99,7 @@ body {
     overflow: hidden;
     height: calc(3 * var(--item-height));
     background-color: var(--reel-bg);
-    border: 6px solid var(--dark-accent); /* thicker reel border */
+    border: 6px solid var(--dark-accent);
     border-radius: 10px;
 }
 
@@ -87,8 +110,8 @@ body {
     float: left;
     margin: 0 3px;
     background-color: var(--reel-bg);
-    border: 4px solid var(--dark-accent); /* thicker */
-    box-shadow: inset 0 0 0 2px var(--secondary-color); /* pixel-style inner border */
+    border: 4px solid var(--dark-accent);
+    box-shadow: inset 0 0 0 2px var(--secondary-color);
     height: calc(var(--item-height) * 3);
     border-radius: 6px;
 }
@@ -143,17 +166,18 @@ body {
 /* ================= Spin Button ================= */
 .start-button {
     margin-top: 30px;
-    padding: 25px 60px; /* bigger button */
-    font-size: 18px;     /* slightly larger text */
+    padding: 25px 60px;
+    font-size: 18px;
     font-family: 'Press Start 2P', monospace;
     color: var(--background-color);
     background: var(--primary-color);
-    border: 6px solid var(--dark-accent); /* thicker for retro arcade feel */
-    border-radius: 12px; /* more rounded but still pixel-y */
+    border: 6px solid var(--dark-accent);
+    border-radius: 12px;
     cursor: pointer;
     text-shadow: 2px 2px var(--dark-accent);
-    image-rendering: pixelated; /* keep pixel edges */
+    image-rendering: pixelated;
     box-shadow: 2px 2px var(--dark-accent);
+    z-index: 12; /* above corn foreground if needed */
 }
 
 .start-button:active {
@@ -172,3 +196,18 @@ body {
     background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
     z-index: 999;
 }
+
+/* ================= Corn Stalks in Foreground ================= */
+.corn-left, .corn-right {
+    position: absolute;
+    bottom: 0;
+    width: 120px;
+    height: 300px;
+    background-image: url('images/corn_stalk.png'); /* single stalk sprite */
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 11; /* above slot machine container */
+}
+
+.corn-left { left: 0; }
+.corn-right { right: 0; }

@@ -17,8 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
     cols = document.querySelectorAll('.col');
     setInitialItems();
 
-    // ===================== Font Load & Title Animation =====================
-    // Ensure Press Start 2P is fully loaded before animating the title
+    // Ensure Press Start 2P font is loaded before starting arcade animation
     document.fonts.load('16px "Press Start 2P"').then(() => {
         const title = document.querySelector('.title');
         title.style.animation = 'arcadeFlash 0.8s infinite';
